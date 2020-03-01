@@ -3,6 +3,8 @@ package com.mystore.demo.controller;
 
 import com.mystore.demo.dao.CustomerRepository;
 import com.mystore.demo.model.Customer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,8 @@ import java.util.Optional;
 @RequestMapping("/api")
 @RestController
 public class CustomerController {
+
+    Logger log = LoggerFactory.getLogger(CustomerController.class);
 
     @Autowired
     private CustomerRepository customerRepository;
@@ -42,6 +46,7 @@ public class CustomerController {
 
             return new ResponseEntity<>(customerList, HttpStatus.OK);
         } catch (Exception e) {
+            log.error("getAllCustomers: "+e);
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -77,6 +82,7 @@ public class CustomerController {
                     .save(new Customer(customer.getId(), customer.getFirstname(), customer.getLastname(), customer.getCountry()));
             return new ResponseEntity<>(newCustomer, HttpStatus.CREATED);
         } catch (Exception e) {
+            log.error("createCustomer: "+e);
             return new ResponseEntity<>(null, HttpStatus.EXPECTATION_FAILED);
         }
     }
@@ -113,6 +119,7 @@ public class CustomerController {
             customerRepository.deleteById(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } catch (Exception e) {
+            log.error("deleteCustomer: "+e);
             return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
         }
     }
