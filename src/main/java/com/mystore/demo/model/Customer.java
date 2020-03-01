@@ -17,9 +17,19 @@ public class Customer {
     private String country;
 
 
+    public Customer(){}
+
+    public Customer(Integer id, String firstname, String lastname, String country) {
+        this.id = id;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.country = country;
+    }
+
     public Integer getId() {
         return id;
     }
+
 
     public void setId(Integer id) {
         this.id = id;

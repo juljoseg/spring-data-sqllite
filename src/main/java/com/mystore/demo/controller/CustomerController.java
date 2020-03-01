@@ -20,6 +20,12 @@ public class CustomerController {
     @Autowired
     private CustomerRepository customerRepository;
 
+    /**
+     * GET all customers or get customers by optional param country
+     *
+     * @param country
+     * @return
+     */
     @GetMapping("/customers")
     public ResponseEntity<List<Customer>> getAllCustomers(@RequestParam(required = false) String country) {
         try {
@@ -41,7 +47,12 @@ public class CustomerController {
     }
 
 
-
+    /**
+     * GET customer by Id
+     *
+     * @param id
+     * @return
+     */
     @GetMapping("/customers/{id}")
     public ResponseEntity<Customer> getCustomerById(@PathVariable("id") Integer id) {
         Optional<Customer> customerData = customerRepository.findById(id);
@@ -53,8 +64,22 @@ public class CustomerController {
         }
     }
 
+    /**
+     * POST create new customer
+     *
+     * @param customer
+     * @return
+     */
+    @PostMapping("/customers")
+    public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) {
+        try {
+            Customer newCustomer = customerRepository
+                    .save(new Customer(customer.getId(), customer.getFirstname(), customer.getLastname(), customer.getCountry()));
+            return new ResponseEntity<>(newCustomer, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.EXPECTATION_FAILED);
+        }
+    }
 
-
-    
 
 }
