@@ -81,5 +81,40 @@ public class CustomerController {
         }
     }
 
+    /**
+     * PUT - Update customer by id
+     * @param id
+     * @param customer
+     * @return
+     */
+    @PutMapping("/customers/{id}")
+    public ResponseEntity<Customer> updateCustomer(@PathVariable("id") Integer id, @RequestBody Customer customer) {
+        Optional<Customer> dbCustomer = customerRepository.findById(id);
+
+        if (dbCustomer.isPresent()) {
+            dbCustomer.get().setCountry(customer.getCountry());
+            dbCustomer.get().setFirstname(customer.getFirstname());
+            dbCustomer.get().setLastname(customer.getLastname());
+            return new ResponseEntity<>(customerRepository.save(dbCustomer.get()), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+
+    /**
+     * DELETE customer by id
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/customers/{id}")
+    public ResponseEntity<HttpStatus> deleteCustomer(@PathVariable("id") Integer id) {
+        try {
+            customerRepository.deleteById(id);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.EXPECTATION_FAILED);
+        }
+    }
 
 }
