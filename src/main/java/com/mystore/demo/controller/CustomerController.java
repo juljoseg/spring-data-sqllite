@@ -78,9 +78,7 @@ public class CustomerController {
     @PostMapping("/customers")
     public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) {
         try {
-            Customer newCustomer = customerRepository
-                    .save(new Customer(customer.getId(), customer.getFirstname(), customer.getLastname(), customer.getCountry()));
-            return new ResponseEntity<>(newCustomer, HttpStatus.CREATED);
+            return new ResponseEntity<>(customerRepository.save(customer), HttpStatus.CREATED);
         } catch (Exception e) {
             log.error("createCustomer: "+e);
             return new ResponseEntity<>(null, HttpStatus.EXPECTATION_FAILED);
